@@ -1,0 +1,6 @@
+*.sw?
+Makefile
+*.gz
+.build
+Apache-BalancerManager-*
+*.un~
