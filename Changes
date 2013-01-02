@@ -1,4 +1,6 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.001000  2013-01-02 13:44:03 CST6CDT
  - Hurray new module!
