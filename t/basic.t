@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 
+use Test::LWP::UserAgent;
 use Test::More;
 use Test::Deep;
 use URI;
@@ -39,10 +40,12 @@ href="/balancer-manager?b=balancer_name&w=http://127.0.0.1:5001&nonce=balancer_n
 </body></html>
 CONTENT
 
+Test::LWP::UserAgent->map_response( qr(127.0.0.1/balancer-manager),
+HTTP::Response->new(200, "OK", ["Content-Type" => "text/html"], $content));
+
 my $a = AgentMocker->new;
-my $mgr = A::BM->new(
+my $mgr = Apache::BalancerManager->new(
    url => 'http://127.0.0.1/balancer-manager',
-   _index_content => $content,
    user_agent => $a,
 );
 
@@ -87,7 +90,7 @@ $m2->status(1);
 
 $m1->update;
 
-cmp_deeply(URI->new($a->get)->query_form_hash, {
+cmp_deeply(URI->new($a->_get)->query_form_hash, {
   b => 'balancer_name',
   dw => 'Disable',
   lf => '0.5',
@@ -100,7 +103,7 @@ cmp_deeply(URI->new($a->get)->query_form_hash, {
 
 $m2->update;
 
-cmp_deeply(URI->new($a->get)->query_form_hash, {
+cmp_deeply(URI->new($a->_get)->query_form_hash, {
   b => "balancer_name",
   dw => "Enable",
   lf => 1,
@@ -116,7 +119,7 @@ $m2->disable;
 
 $m1->update;
 
-cmp_deeply(URI->new($a->get)->query_form_hash, {
+cmp_deeply(URI->new($a->_get)->query_form_hash, {
   b => 'balancer_name',
   dw => 'Enable',
   lf => '0.5',
@@ -129,7 +132,7 @@ cmp_deeply(URI->new($a->get)->query_form_hash, {
 
 $m2->update;
 
-cmp_deeply(URI->new($a->get)->query_form_hash, {
+cmp_deeply(URI->new($a->_get)->query_form_hash, {
   b => "balancer_name",
   dw => "Disable",
   lf => 1,
@@ -143,18 +146,18 @@ cmp_deeply(URI->new($a->get)->query_form_hash, {
 done_testing;
 
 BEGIN {
-package A::BM;
-
-use Moo;
-
-extends 'Apache::BalancerManager';
-
-has '+_index_content' => ( init_arg => '_index_content' );
-
 package AgentMocker;
 
 use Moo;
+extends 'Test::LWP::UserAgent';
 
-has get => ( is => 'rw' );
+sub get {
+   my $self = shift;
 
+   $self->_get($_[0]);
+
+   $self->next::method(@_);
+}
+
+has _get => ( is => 'rw' );
 }

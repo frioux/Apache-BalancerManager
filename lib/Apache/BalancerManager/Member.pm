@@ -30,7 +30,7 @@ has manager => (
       _balancer_name => 'name',
       _nonce         => 'nonce',
       _url           => 'url',
-      _user_agent    => '_user_agent',
+      _get           => '_get',
    },
 );
 
@@ -51,7 +51,7 @@ sub update {
       b     => $self->_balancer_name,
       nonce => $self->_nonce,
    });
-   $self->_user_agent->get($uri);
+   $self->_get($uri);
 }
 
 1;
