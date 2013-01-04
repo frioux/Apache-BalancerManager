@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+ - Fix missing deps
 
 0.001001  2013-01-03 13:25:14 CST6CDT
  - And of course, fix stupid deal breaker bug
