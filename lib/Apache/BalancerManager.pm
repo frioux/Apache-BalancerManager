@@ -85,8 +85,10 @@ sub _build_scraper {
          process '//td[5]', 'lb_set' => 'TEXT';
          process '//td[6]', status => 'TEXT';
          process '//td[7]', times_elected => 'TEXT';
-         process '//td[8]', to => 'TEXT';
-         process '//td[9]', from => 'TEXT';
+         process '//td[8]', busy => 'TEXT';
+         process '//td[9]', load => 'TEXT';
+         process '//td[10]', to => 'TEXT';
+         process '//td[11]', from => 'TEXT';
       };
    };
 }
