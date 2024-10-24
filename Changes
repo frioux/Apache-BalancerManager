@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+ - Update for modern httpd (at least > 2.4.41)
 
 0.001002  2013-01-04 09:45:07 CST6CDT
  - Fix missing deps

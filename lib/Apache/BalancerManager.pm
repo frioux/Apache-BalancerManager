@@ -115,7 +115,17 @@ has _user_agent => (
    },
 );
 
-sub _build_user_agent { require LWP::UserAgent; LWP::UserAgent->new }
+sub _build_user_agent {
+   my $self = shift;
+   require LWP::UserAgent;
+   require URI;
+   my $uri = URI->new($self->url);
+   my $ua = LWP::UserAgent->new;
+   # since httpd 2.4.41 referer is required for XSS protection
+   $ua->default_header(Referer => $self->url);
+   $ua->default_header(Host => $uri->host);
+   $ua
+}
 
 has _members => (
    is => 'ro',
