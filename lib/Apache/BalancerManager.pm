@@ -109,7 +109,10 @@ has _user_agent => (
    lazy => 1,
    init_arg => 'user_agent',
    builder => '_build_user_agent',
-   handles => { _get => 'get' },
+   handles => {
+      _get => 'get',
+      _post => 'post',
+   },
 );
 
 sub _build_user_agent { require LWP::UserAgent; LWP::UserAgent->new }
