@@ -20,7 +20,7 @@ has name => (
 sub _build_name {
    my $ret = $_[0]->_scraped_content->{name_stuff};
 
-   $ret =~ s(^LoadBalancer Status for balancer://)();
+   $ret =~ s(^balancer://)();
 
    return $ret
 }
@@ -75,7 +75,7 @@ has _scraper => (
 
 sub _build_scraper {
    return scraper {
-      process 'h3', name_stuff => 'TEXT';
+      process 'h3 > a', name_stuff => 'TEXT';
       process '//table[2]/tr' => 'data[]' => scraper {
          process '//td[1]/a/@href', 'link' => 'TEXT';
          process '//td[1]/a', 'location' => 'TEXT';
